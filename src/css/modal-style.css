@@ -1,0 +1,144 @@
+/* general*/
+.admin-modal-pos-control {
+    padding: 100px 10px 0px 280px;
+}
+
+.right-align {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Quản lý phim */
+.movie-info-modal-control {
+    margin-top: 70px;
+    width: 98%;
+}
+
+/* Quản lý khách*/
+.customer-info-modal-control {
+    margin-top: 70px;
+    width: 70%;
+}
+
+#customer-info .panel-body {
+    font-size: 16px;
+    font-weight: lighter;
+}
+
+.custom-control-label {
+    font-weight: 400;
+}
+
+.service-pack-modal-control {
+    margin-top: 70px;
+    margin-left: 15%;
+    width: 70%;
+}
+
+.modal-header a.close-icon {
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.btn-container {
+    margin: 10px 0px;
+}
+
+.dual-btn-left,
+.dual-btn-right {
+    width: 120px;
+    background-color: white;
+    color: #000;
+    border: 1px solid grey;
+}
+
+.dual-btn-left {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.dual-btn-right {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.dual-btn-left:hover,
+.dual-btn-right:hover,
+.dual-btn-left:active,
+.dual-btn-right:active {
+    background-color: blue;
+    color: white;
+}
+
+
+.Movie-info-body-size {
+    min-height: 400px;
+    max-height: 450px;
+    padding: 0px 40px;
+}
+
+/* Thống kê 2*/
+.dot {
+    height: 50px;
+    width: 50px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    display: inline-block;
+    border-color: aquamarine;
+    color: rgb(90, 90, 90);
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+    padding: 1px 0px;
+    box-shadow: 2px 4px gray;
+}
+
+.num-ranking-control {
+    height: 100px;
+}
+
+.number-control {
+    position: absolute;
+    top: 15px  ;
+}
+
+td img {
+    width: 80px;
+    height: 100px;
+    margin: 4px;
+}
+
+/* thông báo */
+#add-notification .panel-heading {
+    color: #000;
+    background-color: white;
+    border-top: 4px solid rgba(75, 150, 230, 1);
+}
+
+.add-notification-modal-control {
+    margin-top: 70px;
+    width: 90%;
+}
+
+#add-notification .panel-body {
+    padding: 20px 50px;
+}
+
+#add-notification .panel-heading,
+#add-notification .panel-footer {
+    padding: 10px 40px;
+}
+
+#detail label {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.sale-promotion-modal-control {
+    padding: 5px 60px;
+}
+
+#sale-promotion .panel-body {
+    padding: 10px 40px;
+    font-size: 16px;
+}
