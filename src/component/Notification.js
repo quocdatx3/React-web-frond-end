@@ -8,72 +8,69 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
-import { allData } from "./fakedata/Notification";
+import SEVER_URL from '../setup';
 
 
-const ConfirmModal = React.forwardRef((props, ref) => {
-    React.useImperativeHandle(ref, () => ({
-        handModal() {
-            setIsShow(!isShow);
-        }
-    }));
+const ConfirmModal = props => {
 
-    const [isShow, setIsShow] = React.useState(false);
-    const handModal = event => {
-        setIsShow(!isShow);
+    const sendNotification = () => {
+        console.log("sendNotification " + props.data);
+
+        props.closeConfirmMedal();
+        props.closeDetailModal();
     }
-    
+
     return (
         <>
-            <div id="confirm" className="modal admin-modal-pos-control" style={{ display: isShow ? 'block' : 'none' }}>
+            <div id="confirm" className="modal admin-modal-pos-control" style={{ display: 'block'}}>
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
 
                             <button className="astext pull-right">
-                                <i className="glyphicon glyphicon-remove" onClick={() => handModal()}></i></button>
+                                <i className="glyphicon glyphicon-remove" onClick={() => props.closeConfirmMedal()}></i></button>
                         </div>
                         <div className="modal-body text-center">
                             <p>Bạn có chắc chắn muốn gửi<br />
                                 thông báo ?</p>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn" onClick={() => handModal()}>Hủy</button>
-                            <button className="btn btn-primary" onClick={()=>props.func()}>Xóa</button>
+                            <button className="btn" onClick={() => props.closeConfirmMedal()}>Hủy</button>
+                            <button className="btn btn-primary" onClick={() => sendNotification()}>Xóa</button>
                         </div>
                     </div>
                 </div>
             </div>
         </>
     );
-});
+}
 
-const DetailModal = React.forwardRef((props, ref) => {
-    React.useImperativeHandle(ref, () => ({
-        handModal() {
-            setIsShow(!isShow);
-        }
-    }));
-
-    const [isShow, setIsShow] = React.useState(false);
-    const handModal = event => {
-        setIsShow(!isShow);
+const DetailModal = props => {
+    
+    console.log(props.data);
+    const [showConfirmMedal, setShowConfirmMedal] = React.useState(false);
+    const clickConfirmMedal = () => {
+        setShowConfirmMedal(!showConfirmMedal)
+    };
+    const closeConfirmMedal = () => {
+        setShowConfirmMedal(!showConfirmMedal)
     }
-
-    const sentNotice = ()=>{
-        props.func();
-        handModal();
+    const sentNotice = () => {
+        clickConfirmMedal();
     }
     return (
         <>
-            <div id="notification-info" className="modal admin-modal-pos-control" style={{ display: isShow ? 'block' : 'none' }}>
+            <div id="notification-info" className="modal admin-modal-pos-control" style={{ display: 'block'}}>
                 <div className="notification-info-modal-control center-block">
                     <div className="panel panel-info">
                         <div className="panel-heading">
-                            <h4 className="panel-title" id="noti-headline">{props.headline}</h4>
+                            <h4 className="panel-title" id="noti-headline">{props.data.tieuDeThongBao}</h4>
+                            <button className="astext pull-right" >
+                                <i className="glyphicon glyphicon-remove" onClick={() => props.closeDetailModal()}></i>
+                            </button>
                         </div>
                         <div className="panel-body">
-                            <p>{props.content}
+                            <p>{props.data.noiDungThongBao}
                             </p>
 
                         </div>
@@ -83,25 +80,21 @@ const DetailModal = React.forwardRef((props, ref) => {
                     </div>
                 </div>
             </div>
+            {showConfirmMedal ? <ConfirmModal data={props.data.idThongBao} closeConfirmMedal={closeConfirmMedal} closeDetailModal={props.closeDetailModal}/> : null}
         </>
     )
-});
+};
 
-const AddModal = React.forwardRef((props, ref) => {
-    React.useImperativeHandle(ref, () => ({
-        handModal() {
-            setIsShow(!isShow);
-        }
-    }));
+const AddModal = props => {
 
-    const [isShow, setIsShow] = React.useState(false);
-    const handModal = event => {
-        setIsShow(!isShow);
+    const addNotice = () => {
+        console.log("addNotice " + props);
+        props.closeNewModal();
     }
 
     return (
         <>
-            <div id="notification-info" className="modal admin-modal-pos-control" style={{ display: isShow ? 'block' : 'none' }}>
+            <div id="notification-info" className="modal admin-modal-pos-control" style={{ display: 'block' }}>
                 <div className="notification-info-modal-control center-block">
                     <div className="panel panel-info">
                         <div className="panel-heading">
@@ -110,18 +103,18 @@ const AddModal = React.forwardRef((props, ref) => {
                         <div className="panel-body">
                             <div className="form-group">
                                 <div className="col-8">
-                                    <input id="noti-headline" name="noti-headline" type="text" className="form-control" placeholder="Tiêu đề" />
+                                    <input type="text" className="form-control" placeholder="Tiêu đề" />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="">
-                                    <textarea id="noti- content" name="noti-content" cols="40" rows="15" className="form-control" placeholder="Nội dung"/>
+                                    <textarea cols="40" rows="15" className="form-control" placeholder="Nội dung" />
                                 </div>
                             </div>
 
                             <div className="panel-footer right-align">
-                                <button type="button" className="btn" onClick={()=>handModal()}>Hủy</button>
-                                <button type="button" className="btn btn-primary" onClick={()=>props.func}>Lưu</button>
+                                <button type="button" className="btn" onClick={()=>props.closeNewModal()}>Hủy</button>
+                                <button type="button" className="btn btn-primary" onClick={()=>addNotice()}>Lưu</button>
                             </div>
                         </div>
                     </div>
@@ -129,14 +122,15 @@ const AddModal = React.forwardRef((props, ref) => {
             </div>
         </>
     )
-});
+};
 
-export default function Notification() {
+const NotificationTable = props =>{
+    const allData = props.allData;
+
     const tableHead = {
         star: "",
         headline: ""
     };
-
     const countPerPage = 4;
     const [value, setValue] = React.useState("");
     const [currentPage, setCurrentPage] = React.useState(1);
@@ -149,7 +143,7 @@ export default function Notification() {
             setCurrentPage(1);
             const data = cloneDeep(
                 allData
-                    .filter(item => item.headline.toLowerCase().indexOf(query) > -1)
+                    .filter(item => item.tieuDeThongBao.toLowerCase().indexOf(query) > -1)
                     .slice(0, countPerPage)
             );
             setCollection(data);
@@ -170,16 +164,22 @@ export default function Notification() {
         const from = to - countPerPage;
         setCollection(cloneDeep(allData.slice(from, to)));
     };
-
+    function limit(string = '', limit = 0) {
+        return string?.substring(0, limit) || '';
+    }
     const tableRows = rowData => {
         const { key, index } = rowData;
         const tableCell = Object.keys(tableHead);
         const columnData = tableCell.map((keyD, i) => {
-            if (i === 1) return <td key={i}><h4>{key["headline"]}</h4><p>{key["content"]}</p></td>;
-            return <td key={i}>{key[keyD]}</td>;
+            if (i === 1)
+                return <td key={i}>
+                    <h4>{key["tieuDeThongBao"]}</h4>
+                    <p>{limit(key["noiDungThongBao"],200)}</p>
+                </td>;
+            return <td key={i}>{<span className="glyphicon glyphicon-star"></span>}</td>;
         });
 
-        return <tr key={index} onClick={()=>clickDetailModal(key["headline"])}>{columnData}</tr>;
+        return <tr key={index} onClick={() => clickDetailModal(key["idThongBao"])}>{columnData}</tr>;
     };
 
     const tableData = () => {
@@ -191,31 +191,31 @@ export default function Notification() {
             <td key={index}>{title}</td>
         ));
     };
-    /* confim modal */
-    const ConfirmModalRef = React.useRef(null);
-    const confirmModalFunc = () => {
-        console.log("confirm.");
-    }
-    const clickConfirmMedal = () => {
-        ConfirmModalRef.current.handModal();
-    };
-    /* Detail Modal */
-    const DetailModalRef = React.useRef(null);
+
+
+    const [noticeData, setNoticeData] = React.useState();
+
+    const [showDetailModal, setShowDetailModal] = React.useState(false);
     const clickDetailModal = props => {
-        DetailModalRef.current.handModal();
+        setNoticeData(allData.find(obj => { return obj.idThongBao === props }))
+
+        setTimeout(() => {
+            setShowDetailModal(!showDetailModal)
+        }, 800);
     };
-    const DetailModalFunc = () => {
-        console.log("confirm.");
+    const closeDetailModal = () => {
+        setShowDetailModal(!showDetailModal)
     }
-    
-    /* Add Modal */
-    const AddModalRef = React.useRef(null);
-    const AddModalFunc = () => {
-        console.log("add");
-    }
-    const clickAddModal = () => {
-        AddModalRef.current.handModal();
+
+    const [showNewlModal, setShowNewModal] = React.useState(false);
+    const clickNewModal = () => {
+        setShowNewModal(!showNewlModal)
     };
+    const closeNewModal = () => {
+        setShowNewModal(!showNewlModal)
+    }
+
+
     return (
         <div>
             <div className="row toolbar">
@@ -235,7 +235,7 @@ export default function Notification() {
                 <div className="col-md-2">
                     <span className="pull-left">
                         <div>
-                            <button className="btn btn-primary" onClick={()=>clickAddModal()}>+ Tạo</button>
+                            <button className="btn btn-primary" onClick={() => clickNewModal()}>+ Tạo</button>
                         </div>
                     </span>
                 </div>
@@ -260,10 +260,47 @@ export default function Notification() {
                     total={allData.length}
                 />
             </div>
-            <ConfirmModal ref={ConfirmModalRef} func ={confirmModalFunc}/>
-            <DetailModal ref={DetailModalRef} func={clickConfirmMedal} />
-            <AddModal  ref={AddModalRef} func={AddModalFunc} />
+            {showDetailModal ? <DetailModal data={noticeData} closeDetailModal={closeDetailModal} /> : null}
+            {showNewlModal? <AddModal closeNewModal={closeNewModal}/> :null}
         </div>
 
     )
+}
+
+
+export default function Notification() {
+    const [allData, setAllData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [getData, setGetData] = React.useState(true);
+
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/notification/show')
+                .then(response => response.json())
+                .then(data => {
+                    setAllData(data);
+                    setIsLoading(!isLoading);
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [getData]);
+
+    const resetPage = () => {
+        setGetData(!getData);
+        setIsLoading(!isLoading);
+    }
+
+    if (isLoading) {
+        return (
+            <div>
+                <h2>Loading</h2>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <NotificationTable allData={allData} />
+            </div>
+        )
+    }
 }

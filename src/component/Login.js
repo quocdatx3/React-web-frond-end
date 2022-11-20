@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 
 import "../css/login-style.css"
 
+import SEVER_URL from '../setup';
+
 async function loginUser(credentials) {
-    return fetch('http://localhost:3003/apis/login', {
+    return fetch(SEVER_URL + 'apis/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(credentials)
     })
-        .then(data => data.text())
+        .then(data => data.json())
 }
 
 export default function Login({ setToken }) {
@@ -20,11 +22,14 @@ export default function Login({ setToken }) {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await loginUser({
-            username : username,
-            password : password
-        });
+        const token = await loginUser(
+            {
+                tenDangNhap: username,
+                matKhau: password
+            }
+        );
         setToken(token);
+
     }
 
     return (
@@ -37,7 +42,7 @@ export default function Login({ setToken }) {
             <div className="container">
                 <div className="row">
                     <div className="loginframe">
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="form-group-login">
                                 <img id="profile-img" src="/img/Ellipse-1.png" alt='preimg' />
                             </div>
@@ -53,7 +58,7 @@ export default function Login({ setToken }) {
                                 <span className="fa fa-unlock-alt field-icon-logo"></span>
                             </div>
                             <div className="form-group-login">
-                                <button type="submit" className="btn btnlogin" onClick={handleSubmit}>Đăng nhập</button>
+                                <button type="submit" className="btn btnlogin">Đăng nhập</button>
                             </div>
                         </form>
                     </div>

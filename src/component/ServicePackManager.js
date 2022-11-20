@@ -8,7 +8,7 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
-import { allData } from "./fakedata/ServicePackage";
+import SEVER_URL from '../setup';
 
 const ConfirmModal = React.forwardRef((props, ref) => {
     React.useImperativeHandle(ref, () => ({
@@ -54,45 +54,27 @@ const DetailModal = React.forwardRef((props, ref) => {
         }
     }));
 
+    const [name, setName] = React.useState()
+    const [price, setPrice] = React.useState()
+    const [quality, setQuality] = React.useState()
+
+    React.useEffect(()=>{
+        console.log(props.data);
+    },[props.data])
+
+    /** Show/Hide Modal **/
     const [isShow, setIsShow] = React.useState(false);
     const handModal = event => {
         setIsShow(!isShow);
     }
 
-    const SeeInfo = () => {
-        return (
-            <>
-                <button className="btn-sm btn-warning" onClick={() => setIsSee(false)}>
-                    <i className="glyphicon glyphicon-edit"></i>
-                </button>
-                <button className="btn-sm btn-danger" onClick={() => handModal()}>
-                    <i className="glyphicon glyphicon-remove"></i>
-                </button>
-            </>
-        );
-    }
-    const FixInfo = () => {
-        return (
-            <>
-                <button type="button" className="btn" onClick={() => setIsSee(true)}>Hủy</button>
-                <button type="button" className="btn btn-primary" onClick={() => handModal()}>Lưu</button>
-            </>
-        )
-    }
-    const [isSee, setIsSee] = React.useState(true);
-    const foot = () => {
-        return isSee ? <SeeInfo /> : <FixInfo />
-    }
-    const head = () => {
-        return isSee ? "Xem" : "Sửa"
-    }
     return (
         <>
             <div id="service-pack-info" className="modal admin-modal-pos-control" style={{ display: isShow ? 'block' : 'none' }}>
                 <div className="service-pack-modal-control center-block">
                     <div className="panel panel-info">
                         <div className="panel-heading">
-                            <h4 className="panel-title" id="plHeadline"> {head()} gói đăng ký</h4>
+                            <h4 className="panel-title" id="plHeadline"> Sửa gói đăng ký</h4>
                         </div>
                         <div className="form-horizontal">
                             <div className="form-group">
@@ -161,7 +143,12 @@ const DetailModal = React.forwardRef((props, ref) => {
                             </div>
                         </div>
                         <div className="panel-footer right-align">
-                            {foot()}
+                            <button className="btn-sm btn-warning" onClick={""}>
+                                <i className="glyphicon glyphicon-edit"></i>
+                            </button>
+                            <button className="btn-sm btn-danger" onClick={() => handModal()}>
+                                <i className="glyphicon glyphicon-remove"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -265,14 +252,16 @@ const AddModal = React.forwardRef((props, ref) => {
     )
 });
 
-export default function ServicePackManager() {
+const ServicePackManagerTable = props => {
+
+    const allData = props.allData
 
     const tableHead = {
-        name: "Gói",
-        price: "Giá tiền",
+        tenGoi: "Gói",
+        giaTien: "Giá tiền",
         rehd: "Độ phân giải HD",
         re4k: "Độ phân giải 4k",
-        muldevice: "Xem trên nhiều thiết bị",
+        muldevice: "Độ phân giải CLC",
         state: "Trạng thái",
         func: "Tác vụ"
     };
@@ -288,7 +277,7 @@ export default function ServicePackManager() {
             const query = val.toLowerCase();
             setCurrentPage(1);
             const data = cloneDeep(
-                allData.filter(item => item.name.toLowerCase().indexOf(query) > -1)
+                allData.filter(item => item.tenGoi.toLowerCase().indexOf(query) > -1)
                     .slice(0, countPerPage)
             );
             setCollection(data);
@@ -310,8 +299,9 @@ export default function ServicePackManager() {
         setCollection(cloneDeep(allData.slice(from, to)));
     };
 
-    const Checkbox = prop => {
-        if (prop)
+    function Checkbox(stra = "", strb = "") {
+        console.log(stra + "+" + strb)
+        if (stra === strb)
             return <input type="checkbox" defaultChecked disabled />
         else
             return <input type="checkbox" disabled />
@@ -319,10 +309,10 @@ export default function ServicePackManager() {
 
     const FuncButtons = props => {
         return <div>
-            <button className="btn btn-primary" onClick={() => clickFixDetailModal(props.stt)}>
+            <button className="btn btn-primary" onClick={() => clickDetailModal(props.id)}>
                 <span className="glyphicon glyphicon-pencil"></span>
             </button>
-            <button className="btn btn-danger" onClick={() => clickConfirmMedal(props.name)}>
+            <button className="btn btn-danger" onClick={() => clickConfirmMedal(props.id)}>
                 <span className="glyphicon glyphicon-trash"></span>
             </button>
         </div>
@@ -334,13 +324,13 @@ export default function ServicePackManager() {
         const columnData = tableCell.map((keyD, i) => {
             switch (i) {
                 case 2:
-                    return <td key={i}>{Checkbox(key[keyD])}</td>;
+                    return <td key={i}>{Checkbox(key["chatLuong"], "HD")}</td>;
                 case 3:
-                    return <td key={i}>{Checkbox(key[keyD])}</td>;
+                    return <td key={i}>{Checkbox(key["chatLuong"], "4K")}</td>;
                 case 4:
-                    return <td key={i}>{Checkbox(key[keyD])}</td>;
+                    return <td key={i}>{Checkbox(key["chatLuong"], "2K")}</td>;
                 case 6:
-                    return <td key={i}><FuncButtons stt={key["stt"]} name={key["name"]} /></td>;
+                    return <td key={i}><FuncButtons id={key["idGoi"]} /></td>;
                 default:
                     return <td key={i}>{key[keyD]}</td>;
             }
@@ -359,19 +349,18 @@ export default function ServicePackManager() {
         ));
     };
 
-    const [confirmModalName, setConfirmModalName] = React.useState("");
+    const [confirmModalData, setModalData] = React.useState("");
     const ConfirmModalRef = React.useRef(null);
     const clickConfirmMedal = props => {
-        setConfirmModalName(props);
-        ConfirmModalRef.current.handModal();
+        setModalData(allData.find(obj => { return obj.idGoi === props }));
+        setTimeout(() => {
+            ConfirmModalRef.current.handModal();
+        }, 800);
     };
 
     const DetailModalRef = React.useRef(null);
     const clickDetailModal = () => {
-        DetailModalRef.current.handModal();
-    };
-    const clickFixDetailModal = props => {
-        //set taget info should take for table
+        setModalData(allData.find(obj => { return obj.idGoi === props }));
         DetailModalRef.current.handModal();
     };
 
@@ -426,9 +415,48 @@ export default function ServicePackManager() {
                 />
             </div>
 
-            <ConfirmModal ref={ConfirmModalRef} name={confirmModalName} />
-            <DetailModal ref={DetailModalRef} />
+            <ConfirmModal ref={ConfirmModalRef} data={confirmModalData} />
+            <DetailModal ref={DetailModalRef} data={confirmModalData} />
             <AddModal ref={AddModalRef} />
         </div>
     )
+}
+
+
+
+export default function ServicePackManager() {
+    const [allData, setAllData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [getData, setGetData] = React.useState(true);
+
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/subscription/show')
+                .then(response => response.json())
+                .then(data => {
+                    setAllData(data);
+                    setIsLoading(!isLoading);
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [getData]);
+
+    const resetPage = () => {
+        setGetData(!getData);
+        setIsLoading(!isLoading);
+    }
+
+    if (isLoading) {
+        return (
+            <div>
+                <h2>Loading</h2>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <ServicePackManagerTable allData={allData} />
+            </div>
+        )
+    }
 }

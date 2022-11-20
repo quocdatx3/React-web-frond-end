@@ -4,10 +4,10 @@ import Adminpage from './component/Adminpage';
 import useToken from "./component/useToken";
 import { BrowserRouter } from 'react-router-dom';
 
-//import jwt_decode from "jwt-decode";
+
 function App() {
   const { token, setToken } = useToken();
-  
+
   if (!token) {
     return <Login setToken={setToken} />
   }
