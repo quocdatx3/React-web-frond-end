@@ -16,11 +16,44 @@ const ConfirmModal = React.forwardRef((props, ref) => {
             setIsShow(!isShow);
         }
     }));
+    const [id, setId] = React.useState()
+    const [name, setName] = React.useState()
+    React.useEffect(() => {
+        setName(props.data.tenGoi);
+        setId(props.data.idGoi);
+    }, [props.data])
 
     const [isShow, setIsShow] = React.useState(false);
     const handModal = event => {
         setIsShow(!isShow);
     }
+
+
+    const confirm = async () => {
+        try {
+            const response = await
+                fetch(SEVER_URL + 'apis/subscription/delete/' + id, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            handModal();
+            props.resetPage();
+        }
+    };
 
     return (
         <>
@@ -34,11 +67,11 @@ const ConfirmModal = React.forwardRef((props, ref) => {
                         </div>
                         <div className="modal-body text-center">
                             <p>Bạn có chắc chắn muốn ngừng cung cấp <br />
-                                gói đăng ký "{props.name}" ?</p>
+                                gói đăng ký "{name}" ?</p>
                         </div>
                         <div className="modal-footer">
                             <button className="btn" onClick={() => handModal()}>Hủy</button>
-                            <button className="btn btn-danger" >Vô hiệu hóa</button>
+                            <button className="btn btn-danger" onClick={() => confirm()}>Vô hiệu hóa</button>
                         </div>
                     </div>
                 </div>
@@ -54,19 +87,71 @@ const DetailModal = React.forwardRef((props, ref) => {
         }
     }));
 
+    const [id, setId] = React.useState()
     const [name, setName] = React.useState()
     const [price, setPrice] = React.useState()
     const [quality, setQuality] = React.useState()
-
-    React.useEffect(()=>{
+    const [reHDChecked, setReHDChecked] = React.useState(false);
+    const [re4KChecked, setRe4KChecked] = React.useState(false);
+    const [re2KChecked, setRe2KChecked] = React.useState(false);
+    React.useEffect(() => {
         console.log(props.data);
-    },[props.data])
+        setName(props.data.tenGoi);
+        setPrice(props.data.giaTien);
+        setQuality(props.data.chatLuong);
+        setId(props.data.idGoi);
+        switch (quality) {
+            case "HD":
+                setReHDChecked(true)
+                break
+            case "4K":
+                setRe4KChecked(true)
+                break
+            case "4K":
+                setRe2KChecked(true)
+                break
+        }
+
+    }, [props.data])
 
     /** Show/Hide Modal **/
     const [isShow, setIsShow] = React.useState(false);
     const handModal = event => {
         setIsShow(!isShow);
+        props.resetPage();
     }
+    /** updateData **/
+    const updateData = async () => {
+        try {
+            const response = await
+                fetch(SEVER_URL + 'apis/subscription/update', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        idGoi: id,
+                        tenGoi: name,
+                        giaTien: price,
+                        chatLuong: quality
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            handModal()
+
+        }
+    };
 
     return (
         <>
@@ -80,125 +165,48 @@ const DetailModal = React.forwardRef((props, ref) => {
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Tên gói</label>
                                 <div className="col-xs-8">
-                                    <input id="service-pack-name" type="text" className="form-control" value="Cao cấp"
-                                        disabled />
+                                    <input type="text"
+                                        className="form-control"
+                                        value={name}
+                                        onChange={e => setName(e.target.value)} />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Giá tiền</label>
                                 <div className="col-xs-8">
-                                    <input id="price" name="price" type="text" className="form-control" value="200.000 đ/tháng" disabled />
+                                    <input type="number" className="form-control" value={price}
+                                        onChange={e => setPrice(e.target.value)} />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Độ phân giải màn hình</label>
                                 <div className="col-xs-8">
                                     <label className="checkbox">
-                                        <input type="checkbox" name="resolution" value="hd-resolotion" checked="checked" disabled />
+                                        <input type="checkbox" value="hd-resolotion"
+                                            defaultChecked={reHDChecked}
+                                            onChange={() => {
+                                                setReHDChecked(!reHDChecked)
+                                                setQuality("HD")
+                                            }} />
                                         Độ phân giải HD
                                     </label>
                                     <label className="checkbox">
-                                        <input type="checkbox" name="resolution" value="4K-resolution" checked="checked" disabled />
+                                        <input type="checkbox" value="4K-resolution"
+                                            defaultChecked={re4KChecked}
+                                            onChange={() => {
+                                                setRe4KChecked(!re4KChecked)
+                                                setQuality("4K")
+                                            }} />
                                         Độ phân giải 4K
                                     </label>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="control-label col-xs-4">Xem trên các thiết bị</label>
-                                <div className="col-xs-8">
                                     <label className="checkbox">
-                                        <input type="checkbox" name="device-types" value="phone" checked="checked" disabled />
-                                        Điện thoại
-                                    </label>
-                                    <label className="checkbox">
-                                        <input type="checkbox" name="device-types" value="tablet" checked="checked" disabled />
-                                        Máy tính bảng
-                                    </label>
-                                    <label className="checkbox">
-                                        <input type="checkbox" name="device-types" value="computer" checked="checked" disabled />
-                                        Máy tính
-                                    </label>
-                                    <label className="checkbox">
-                                        <input type="checkbox" name="device-types" value="tv" checked="checked" disabled />
-                                        TV
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="control-label col-xs-4">Số máy được xem cùng lúc</label>
-                                <div className="col-xs-8">
-                                    <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="1" />
-                                        1
-                                    </label>
-                                    <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="2" />
-                                        2
-                                    </label>
-                                    <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="4" />
-                                        4
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="panel-footer right-align">
-                            <button className="btn-sm btn-warning" onClick={""}>
-                                <i className="glyphicon glyphicon-edit"></i>
-                            </button>
-                            <button className="btn-sm btn-danger" onClick={() => handModal()}>
-                                <i className="glyphicon glyphicon-remove"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-});
-
-const AddModal = React.forwardRef((props, ref) => {
-    React.useImperativeHandle(ref, () => ({
-        handModal() {
-            setIsShow(!isShow);
-        }
-    }));
-
-    const [isShow, setIsShow] = React.useState(false);
-    const handModal = event => {
-        setIsShow(!isShow);
-    }
-    return (
-        <>
-            <div id="service-pack-info" className="modal admin-modal-pos-control" style={{ display: isShow ? 'block' : 'none' }}>
-                <div className="service-pack-modal-control center-block">
-                    <div className="panel panel-info">
-                        <div className="panel-heading">
-                            <h4 className="panel-title" id="plHeadline"> Thêm gói đăng ký</h4>
-                        </div>
-                        <div className="form-horizontal">
-                            <div className="form-group">
-                                <label className="control-label col-xs-4">Tên gói</label>
-                                <div className="col-xs-8">
-                                    <input id="service-pack-name" type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="control-label col-xs-4">Giá tiền</label>
-                                <div className="col-xs-8">
-                                    <input id="price" name="price" type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="control-label col-xs-4">Độ phân giải màn hình</label>
-                                <div className="col-xs-8">
-                                    <label className="checkbox">
-                                        <input type="checkbox" name="resolution" value="hd-resolotion" />
-                                        Độ phân giải HD
-                                    </label>
-                                    <label className="checkbox">
-                                        <input type="checkbox" name="resolution" value="4K-resolution" />
-                                        Độ phân giải 4K
+                                        <input type="checkbox" value="CLC-resolution"
+                                            defaultChecked={re2KChecked}
+                                            onChange={() => {
+                                                setRe2KChecked(!re2KChecked)
+                                                setQuality("2K")
+                                            }} />
+                                        Độ phân giải CLC
                                     </label>
                                 </div>
                             </div>
@@ -242,8 +250,175 @@ const AddModal = React.forwardRef((props, ref) => {
                             </div>
                         </div>
                         <div className="panel-footer right-align">
-                            <button type="button" className="btn" onClick={() => handModal()}>Hủy</button>
-                            <button type="button" className="btn btn-primary" onClick={() => handModal()}>Lưu</button>
+                            <button className="btn-sm btn-warning" onClick={() => updateData()}>
+                                <i className="glyphicon glyphicon-edit"></i>
+                            </button>
+                            <button className="btn-sm btn-danger" onClick={() => handModal()}>
+                                <i className="glyphicon glyphicon-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+});
+
+const AddModal = React.forwardRef((props, ref) => {
+    React.useImperativeHandle(ref, () => ({
+        handModal() {
+            setIsShow(!isShow);
+        }
+    }));
+
+    const [name, setName] = React.useState()
+    const [price, setPrice] = React.useState()
+    const [quality, setQuality] = React.useState()
+    const [reHDChecked, setReHDChecked] = React.useState(false);
+    const [re4KChecked, setRe4KChecked] = React.useState(false);
+    const [re2KChecked, setRe2KChecked] = React.useState(false);
+
+    /** Show/Hide Modal **/
+    const [isShow, setIsShow] = React.useState(false);
+    const handModal = event => {
+        setIsShow(!isShow);
+        props.resetPage();
+    }
+    /** updateData **/
+    const updateData = async () => {
+        try {
+            const response = await
+                fetch(SEVER_URL + 'apis/subscription/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        tenGoi: name,
+                        giaTien: price,
+                        chatLuong: quality
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            handModal()
+
+        }
+    };
+
+    return (
+        <>
+            <div id="service-pack-info" className="modal admin-modal-pos-control" style={{ display: isShow ? 'block' : 'none' }}>
+                <div className="service-pack-modal-control center-block">
+                    <div className="panel panel-info">
+                        <div className="panel-heading">
+                            <h4 className="panel-title" id="plHeadline"> Sửa gói đăng ký</h4>
+                        </div>
+                        <div className="form-horizontal">
+                            <div className="form-group">
+                                <label className="control-label col-xs-4">Tên gói</label>
+                                <div className="col-xs-8">
+                                    <input type="text"
+                                        className="form-control"
+                                        value={name}
+                                        onChange={e => setName(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="control-label col-xs-4">Giá tiền</label>
+                                <div className="col-xs-8">
+                                    <input type="number" className="form-control" value={price}
+                                        onChange={e => setPrice(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="control-label col-xs-4">Độ phân giải màn hình</label>
+                                <div className="col-xs-8">
+                                    <label className="checkbox">
+                                        <input type="checkbox" value="hd-resolotion"
+                                            defaultChecked={reHDChecked}
+                                            onChange={() => {
+                                                setReHDChecked(!reHDChecked)
+                                                setQuality("HD")
+                                            }} />
+                                        Độ phân giải HD
+                                    </label>
+                                    <label className="checkbox">
+                                        <input type="checkbox" value="4K-resolution"
+                                            defaultChecked={re4KChecked}
+                                            onChange={() => {
+                                                setRe4KChecked(!re4KChecked)
+                                                setQuality("4K")
+                                            }} />
+                                        Độ phân giải 4K
+                                    </label>
+                                    <label className="checkbox">
+                                        <input type="checkbox" value="CLC-resolution"
+                                            defaultChecked={re2KChecked}
+                                            onChange={() => {
+                                                setRe2KChecked(!re2KChecked)
+                                                setQuality("2K")
+                                            }} />
+                                        Độ phân giải CLC
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="control-label col-xs-4">Xem trên các thiết bị</label>
+                                <div className="col-xs-8">
+                                    <label className="checkbox">
+                                        <input type="checkbox" name="device-types" value="phone" />
+                                        Điện thoại
+                                    </label>
+                                    <label className="checkbox">
+                                        <input type="checkbox" name="device-types" value="tablet" />
+                                        Máy tính bảng
+                                    </label>
+                                    <label className="checkbox">
+                                        <input type="checkbox" name="device-types" value="computer" />
+                                        Máy tính
+                                    </label>
+                                    <label className="checkbox">
+                                        <input type="checkbox" name="device-types" value="tv" />
+                                        TV
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="control-label col-xs-4">Số máy được xem cùng lúc</label>
+                                <div className="col-xs-8">
+                                    <label className="radio-inline">
+                                        <input type="radio" name="device-number" value="1" />
+                                        1
+                                    </label>
+                                    <label className="radio-inline">
+                                        <input type="radio" name="device-number" value="2" />
+                                        2
+                                    </label>
+                                    <label className="radio-inline">
+                                        <input type="radio" name="device-number" value="4" />
+                                        4
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="panel-footer right-align">
+                            <button className="btn-sm btn-warning" onClick={() => updateData()}>
+                                <i className="glyphicon glyphicon-edit"></i>
+                            </button>
+                            <button className="btn-sm btn-danger" onClick={() => handModal()}>
+                                <i className="glyphicon glyphicon-remove"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -300,7 +475,6 @@ const ServicePackManagerTable = props => {
     };
 
     function Checkbox(stra = "", strb = "") {
-        console.log(stra + "+" + strb)
         if (stra === strb)
             return <input type="checkbox" defaultChecked disabled />
         else
@@ -349,23 +523,27 @@ const ServicePackManagerTable = props => {
         ));
     };
 
-    const [confirmModalData, setModalData] = React.useState("");
+    const [modalData, setModalData] = React.useState("");
     const ConfirmModalRef = React.useRef(null);
     const clickConfirmMedal = props => {
         setModalData(allData.find(obj => { return obj.idGoi === props }));
+
         setTimeout(() => {
             ConfirmModalRef.current.handModal();
-        }, 800);
+        }, 300);
     };
 
     const DetailModalRef = React.useRef(null);
-    const clickDetailModal = () => {
+    const clickDetailModal = props => {
         setModalData(allData.find(obj => { return obj.idGoi === props }));
-        DetailModalRef.current.handModal();
+        setTimeout(() => {
+            DetailModalRef.current.handModal();
+        }, 300);
     };
 
     const AddModalRef = React.useRef(null);
     const clickAddModal = () => {
+
         AddModalRef.current.handModal();
     };
 
@@ -415,13 +593,12 @@ const ServicePackManagerTable = props => {
                 />
             </div>
 
-            <ConfirmModal ref={ConfirmModalRef} data={confirmModalData} />
-            <DetailModal ref={DetailModalRef} data={confirmModalData} />
+            <ConfirmModal ref={ConfirmModalRef} data={modalData} resetPage={props.resetPage} />
+            <DetailModal ref={DetailModalRef} data={modalData} resetPage={props.resetPage}/>
             <AddModal ref={AddModalRef} />
         </div>
     )
 }
-
 
 
 export default function ServicePackManager() {
@@ -442,7 +619,7 @@ export default function ServicePackManager() {
 
     const resetPage = () => {
         setGetData(!getData);
-        setIsLoading(!isLoading);
+        setIsLoading(true);
     }
 
     if (isLoading) {
@@ -455,7 +632,7 @@ export default function ServicePackManager() {
     else {
         return (
             <div>
-                <ServicePackManagerTable allData={allData} />
+                <ServicePackManagerTable allData={allData} resetPage={resetPage} />
             </div>
         )
     }
