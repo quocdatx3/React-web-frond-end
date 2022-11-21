@@ -430,7 +430,7 @@ const MovieListTable = props => {
 
         setTimeout(() => {
             setShowDetailModal(!showDetailModal)
-        }, 800);
+        }, 1200);
     };
     const closeDetailModal = () => {
         setShowDetailModal(!showDetailModal)

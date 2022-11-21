@@ -32,70 +32,9 @@ const Card = props => {
     )
 }
 
-const Statistic2Table = () => {
+const Statistic2Table = props => {
     
-    const allData = [
-        {
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 50
-        }, {
-            stt: 2,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 40
-        }, {
-            stt: 3,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 35
-        }, {
-            stt: 4,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 34
-        }, {
-            stt: 5,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 33
-        }, {
-            stt: 6,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 31
-        }, {
-            stt: 7,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 24
-        }, {
-            stt: 8,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 23
-        }, {
-            stt: 9,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 22
-        }, {
-            stt: 10,
-            anh: null,
-            ten: "Tên phim",
-            theLoai: "Thể loại",
-            luotYeuThich: 10
-        }
-    ]
+    const allData = props.allData
 
     const [collection] = React.useState(cloneDeep(allData));
     const cardsArrayData = (from, to) => {
@@ -104,10 +43,10 @@ const Statistic2Table = () => {
                 return <div key={index}>
                     <Card 
                         stt={index + 1}
-                        imgURL={key["anh"]}
-                        name={key["ten"]}
+                        imgURL={key["duongDanAnh"]}
+                        name={key["tenPhim"]}
                         type={key["theLoai"]}
-                        loves={key["luotYeuThich"]}
+                        loves={key["danhGiaPhim"]}
                     />
                 </div>;
                 else return null;
@@ -156,10 +95,10 @@ export default function Statistic2() {
 
     React.useEffect(
         () => {
-            fetch(SEVER_URL + 'apis/user/show')
+            fetch(SEVER_URL + 'apis/admin/show/film/rating/1')
                 .then(response => response.json())
                 .then(data => {
-                    setAllData(data);
+                    setAllData(data.slice(0, 10));
                     setIsLoading(!isLoading);
                 });
             // empty dependency array means this effect will only run once (like componentDidMount in classes)
