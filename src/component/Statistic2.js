@@ -108,7 +108,7 @@ export default function Statistic2() {
                         loves={key["luotYeuThich"]}
                     />
                 </div>;
-                else return <div key={index}></div>
+                else return null;
         });
     };
 
