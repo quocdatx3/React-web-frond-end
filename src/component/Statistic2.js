@@ -5,6 +5,8 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
+import SEVER_URL from '../setup';
+
 const Card = props => {
 
     const setImg = () => {
@@ -30,8 +32,8 @@ const Card = props => {
     )
 }
 
-export default function Statistic2() {
-
+const Statistic2Table = () => {
+    
     const allData = [
         {
             anh: null,
@@ -145,4 +147,41 @@ export default function Statistic2() {
             </div>
         </div>
     )
+}
+
+export default function Statistic2() {
+    const [allData, setAllData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [getData, setGetData] = React.useState(true);
+
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/user/show')
+                .then(response => response.json())
+                .then(data => {
+                    setAllData(data);
+                    setIsLoading(!isLoading);
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [getData]);
+
+    const resetPage = () => {
+        setGetData(!getData);
+        setIsLoading(!isLoading);
+    }
+
+    if (isLoading && allData.length < 1) {
+        return (
+            <div>
+                <h2>Loading</h2>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <Statistic2Table allData={allData} resetPage={resetPage} />
+            </div>
+        )
+    }
 }

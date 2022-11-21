@@ -134,7 +134,7 @@ const DetailModal = React.forwardRef((props, ref) => {
             console.log(err.message);
         } finally {
             handModal()
-
+            props.resetPage()
         }
     };
 

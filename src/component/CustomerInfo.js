@@ -152,7 +152,7 @@ const CustomerInfoTable = props => {
         stt: "STT",
         tenDayDu: "Khách hàng",
         email: "Email",
-        phonenumber: "Số điện thoại",
+        //phonenumber: "Số điện thoại",
         ngaySinh: "Ngày sinh",
         gioiTinh: "Giới tính"
     };
@@ -200,7 +200,7 @@ const CustomerInfoTable = props => {
             switch (i) {
                 case 0:
                     return <td key={i}>{index + 1 + (currentPage - 1) * countPerPage}</td>;
-                case 4:
+                case 3:
                     return <td key={i}>{limit(key[keyD], 10)}</td>;
                 default:
                     return <td key={i}>{key[keyD]}</td>;

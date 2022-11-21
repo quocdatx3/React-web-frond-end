@@ -8,17 +8,17 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
-import { allData } from "./fakedata/static1";
+import SEVER_URL from '../setup';
 
-export default function Statistic1() {
-
+const Statistic1Table = props => {
+    const allData = props.allData
     const tableHead = {
         stt: "#",
-        img: "",
-        name: "Phim",
-        type: "Thể loại",
-        tops: "Số lần trong TOP 10",
-        views: "Lượt xem"
+        duongDanAnh: "",
+        tenPhim: "Phim",
+        //type: "Thể loại",
+        //tops: "Số lần trong TOP 10",
+        luotXem: "Lượt xem"
     };
 
     const countPerPage = 10;
@@ -60,17 +60,30 @@ export default function Statistic1() {
         const to = countPerPage * currentPage;
         const from = to - countPerPage;
         if (sortOder)
-            setCollection(cloneDeep(allData.sort((a, b) => a.views - b.views).slice(from, to)));
+            setCollection(cloneDeep(allData.sort((a, b) => a.luotXem - b.luotXem).slice(from, to)));
         else
-            setCollection(cloneDeep(allData.sort((a, b) => -(a.views - b.views)).slice(from, to)));
+            setCollection(cloneDeep(allData.sort((a, b) => -(a.luotXem - b.luotXem)).slice(from, to)));
         setSortOder(!sortOder);
     }
-
+    const setImg = props => {
+        console.log(props)
+        //if (props?.duongDanAnh)
+        return <img src={props} alt="/img/img-not-found.png"></img>
+        // else
+        //    return <img src="/img/img-not-found.png" alt="khong thay anh" />
+    }
     const tableRows = rowData => {
         const { key, index } = rowData;
         const tableCell = Object.keys(tableHead);
         const columnData = tableCell.map((keyD, i) => {
-            return <td key={i}>{key[keyD]}</td>;
+            switch (i) {
+                case 0:
+                    return <td key={i}>{index + 1 + (currentPage - 1) * countPerPage}</td>
+                case 1:
+                    return <td key={i}>{setImg(key["duongDanAnh"])}</td>
+                default:
+                    return <td key={i}>{key[keyD]}</td>
+            }
         });
 
         return <tr key={index}>{columnData}</tr>;
@@ -82,7 +95,7 @@ export default function Statistic1() {
 
     const headRow = () => {
         return Object.values(tableHead).map((title, index) => {
-            if (index === 5) return <td key={index} onClick={() => sortByView()}>{title}</td>
+            if (index === 3) return <td key={index} onClick={() => sortByView()}>{title}</td>
             else return <td key={index}>{title}</td>
         });
     };
@@ -125,4 +138,40 @@ export default function Statistic1() {
 
         </div>
     )
+}
+
+export default function Statistic1() {
+    const [allData, setAllData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [getData, setGetData] = React.useState(true);
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/admin/show/film/view/1')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    setAllData(data)
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [getData]);
+
+    const resetPage = () => {
+        setGetData(!getData);
+        setIsLoading(!isLoading);
+    }
+
+    if (isLoading && allData.length < 1) {
+        return (
+            <div>
+                <h2>Loading</h2>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <Statistic1Table allData={allData} resetPage={resetPage} />
+            </div>
+        )
+    }
 }

@@ -525,6 +525,7 @@ export default function SalePromotion() {
                 .then(data => {
                     setAllData(data);
                     setIsLoading(!isLoading);
+                    console.log(data)
                 });
             // empty dependency array means this effect will only run once (like componentDidMount in classes)
         }, [getData]);

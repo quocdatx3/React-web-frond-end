@@ -253,10 +253,6 @@
   font-size: 16px;
 }
 
-#movielist img{
-  width: 64px;
-  height: 80px;
-}
 
 #customers-info-table thead td:nth-child(1){
   width: 5%;

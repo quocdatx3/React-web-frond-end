@@ -383,7 +383,7 @@ const MovieListTable = props => {
         const columnData = tableCell.map((keyD, i) => {
             switch (i) {
                 case 0:
-                    return <td key={i}>{index + 1}</td>;
+                    return <td key={i}>{index+1+(currentPage-1)*countPerPage}</td>;
                 case 2:
                     return <td key={i}> {typeList(key["theLoai"])} </td>;
                 case 3:
