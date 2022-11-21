@@ -355,8 +355,8 @@ const MovieListTable = props => {
 
     const setImg = props => {
         console.log(props)
-        if (props.length > 0)
-            return <img src={props[0].duongDanAnh} alt="/img/img-not-found.png"></img>
+        if (props?.duongDanAnh)
+            return <img src={props.duongDanAnh} alt="/img/img-not-found.png"></img>
         else
             return <img src="/img/img-not-found.png" alt="khong thay anh" />
     }

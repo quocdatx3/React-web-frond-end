@@ -91,27 +91,12 @@ const DetailModal = React.forwardRef((props, ref) => {
     const [name, setName] = React.useState()
     const [price, setPrice] = React.useState()
     const [quality, setQuality] = React.useState()
-    const [reHDChecked, setReHDChecked] = React.useState(false);
-    const [re4KChecked, setRe4KChecked] = React.useState(false);
-    const [re2KChecked, setRe2KChecked] = React.useState(false);
     React.useEffect(() => {
         console.log(props.data);
         setName(props.data.tenGoi);
         setPrice(props.data.giaTien);
         setQuality(props.data.chatLuong);
         setId(props.data.idGoi);
-        switch (quality) {
-            case "HD":
-                setReHDChecked(true)
-                break
-            case "4K":
-                setRe4KChecked(true)
-                break
-            case "4K":
-                setRe2KChecked(true)
-                break
-        }
-
     }, [props.data])
 
     /** Show/Hide Modal **/
@@ -183,27 +168,24 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-xs-8">
                                     <label className="checkbox">
                                         <input type="checkbox" value="hd-resolotion"
-                                            defaultChecked={reHDChecked}
+                                        checked = {quality === "HD"}
                                             onChange={() => {
-                                                setReHDChecked(!reHDChecked)
                                                 setQuality("HD")
                                             }} />
                                         Độ phân giải HD
                                     </label>
                                     <label className="checkbox">
                                         <input type="checkbox" value="4K-resolution"
-                                            defaultChecked={re4KChecked}
+                                        checked = {quality === "4K"}
                                             onChange={() => {
-                                                setRe4KChecked(!re4KChecked)
                                                 setQuality("4K")
                                             }} />
                                         Độ phân giải 4K
                                     </label>
                                     <label className="checkbox">
                                         <input type="checkbox" value="CLC-resolution"
-                                            defaultChecked={re2KChecked}
+                                        checked = {quality === "2K"}
                                             onChange={() => {
-                                                setRe2KChecked(!re2KChecked)
                                                 setQuality("2K")
                                             }} />
                                         Độ phân giải CLC
@@ -274,18 +256,15 @@ const AddModal = React.forwardRef((props, ref) => {
     const [name, setName] = React.useState()
     const [price, setPrice] = React.useState()
     const [quality, setQuality] = React.useState()
-    const [reHDChecked, setReHDChecked] = React.useState(false);
-    const [re4KChecked, setRe4KChecked] = React.useState(false);
-    const [re2KChecked, setRe2KChecked] = React.useState(false);
 
     /** Show/Hide Modal **/
     const [isShow, setIsShow] = React.useState(false);
     const handModal = event => {
         setIsShow(!isShow);
-        props.resetPage();
+        //props.resetPage();
     }
-    /** updateData **/
-    const updateData = async () => {
+    /** createData **/
+    const creatData = async () => {
         try {
             const response = await
                 fetch(SEVER_URL + 'apis/subscription/create', {
@@ -312,7 +291,7 @@ const AddModal = React.forwardRef((props, ref) => {
             console.log(err.message);
         } finally {
             handModal()
-
+            props.resetPage()
         }
     };
 
@@ -346,27 +325,21 @@ const AddModal = React.forwardRef((props, ref) => {
                                 <div className="col-xs-8">
                                     <label className="checkbox">
                                         <input type="checkbox" value="hd-resolotion"
-                                            defaultChecked={reHDChecked}
                                             onChange={() => {
-                                                setReHDChecked(!reHDChecked)
                                                 setQuality("HD")
                                             }} />
                                         Độ phân giải HD
                                     </label>
                                     <label className="checkbox">
                                         <input type="checkbox" value="4K-resolution"
-                                            defaultChecked={re4KChecked}
                                             onChange={() => {
-                                                setRe4KChecked(!re4KChecked)
                                                 setQuality("4K")
                                             }} />
                                         Độ phân giải 4K
                                     </label>
                                     <label className="checkbox">
                                         <input type="checkbox" value="CLC-resolution"
-                                            defaultChecked={re2KChecked}
                                             onChange={() => {
-                                                setRe2KChecked(!re2KChecked)
                                                 setQuality("2K")
                                             }} />
                                         Độ phân giải CLC
@@ -413,7 +386,7 @@ const AddModal = React.forwardRef((props, ref) => {
                             </div>
                         </div>
                         <div className="panel-footer right-align">
-                            <button className="btn-sm btn-warning" onClick={() => updateData()}>
+                            <button className="btn-sm btn-warning" onClick={() => creatData()}>
                                 <i className="glyphicon glyphicon-edit"></i>
                             </button>
                             <button className="btn-sm btn-danger" onClick={() => handModal()}>
@@ -595,7 +568,7 @@ const ServicePackManagerTable = props => {
 
             <ConfirmModal ref={ConfirmModalRef} data={modalData} resetPage={props.resetPage} />
             <DetailModal ref={DetailModalRef} data={modalData} resetPage={props.resetPage}/>
-            <AddModal ref={AddModalRef} />
+            <AddModal ref={AddModalRef} resetPage={props.resetPage}/>
         </div>
     )
 }
@@ -622,7 +595,7 @@ export default function ServicePackManager() {
         setIsLoading(true);
     }
 
-    if (isLoading) {
+    if (isLoading && allData.length<1) {
         return (
             <div>
                 <h2>Loading</h2>

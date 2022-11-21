@@ -5,36 +5,29 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
+import SEVER_URL from '../setup';
+
 export default function Statistic3() {
-    const [subscribers] = React.useState(1692);
-    const Data = [
-        {
-          label: 'Tiêu Chuẩn',
-          value: 11,
-        },
-        {
-          label: 'Cao cấp',
-          value: 75,
-        },
-        {
-          label: 'Thông thường',
-          value: 75,
-        },
-        {
-          label: 'Phim Lẻ',
-          value: 75,
-        }
-      ];
-    const Color = ['#f44336',
-                    '#e91e63',
-                    '#9c27b0',
-                    '#673ab7',
-                    '#3f51b5',
-                    '#2196f3',
-                    '#03a9f4',
-                    '#00bcd4',
-                    '#009688',
-                    '#4caf50']
+    const [data,setData] = React.useState([])
+    const [subscribers,setSubscribers] = React.useState(1692);
+    const [month,setMonth] = React.useState()
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/admin/show/hotSubscription/')
+                .then(response => response.json())
+                .then(data => {
+                    const filtereData=data.map((key,index)=>{
+                       return {label:key["tenGoi"],value:key["soLanDangKi"]} }
+                        )
+                    console.log(filtereData)
+                    setData(filtereData)
+                    setSubscribers(filtereData.reduce((total,currentItem) =>  total = total + currentItem.value , 0 ))
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [month]);
+
+
+
     return (
         <div>
             <div className="row toolbar">
@@ -48,7 +41,9 @@ export default function Statistic3() {
                     <div className='col-sm-6'>
                         <div className="form-group">
                             <div className='input-group date' id='datetimepicker3'>
-                                <input type='month' className="form-control" />
+                                <input type='month' className="form-control" 
+                                value={month||""}  onChange={e=>{setMonth(e.currentTarget.value)}}
+                                />
                                 <span className="input-group-addon">
                                     <span className="glyphicon glyphicon-search"></span>
                                 </span>
@@ -61,10 +56,9 @@ export default function Statistic3() {
             <div className=".content-justify-center">
                 <div className="chart-place">
                 <DonutChart
-                    data={Data}
+                    data={data}
                     height = {400}
                     width = {400}
-                    colors = {Color}
                     legend = {false}
                 />
                 </div>

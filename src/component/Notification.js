@@ -36,7 +36,7 @@ const ConfirmModal = props => {
                         </div>
                         <div className="modal-footer">
                             <button className="btn" onClick={() => props.closeConfirmMedal()}>Hủy</button>
-                            <button className="btn btn-primary" onClick={() => sendNotification()}>Xóa</button>
+                            <button className="btn btn-primary" onClick={() => sendNotification()}>Gửi</button>
                         </div>
                     </div>
                 </div>

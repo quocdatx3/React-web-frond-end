@@ -8,8 +8,7 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
-import { allData } from "./fakedata/CustomerInfo";
-
+import SEVER_URL from '../setup';
 
 const DetailModal = React.forwardRef((props, ref) => {
     React.useImperativeHandle(ref, () => ({
@@ -17,6 +16,24 @@ const DetailModal = React.forwardRef((props, ref) => {
             setIsShow(!isShow);
         }
     }));
+
+    const [name, setName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [phonenumber, setPhonenumber] = React.useState("");
+    const [birthday, setBirthday] = React.useState("");
+    const [gender, setGender] = React.useState("");
+    const [id, setId] = React.useState();
+
+    React.useEffect(() => {
+        console.log(props.data)
+        if (props?.data) {
+            setId(props.data.idNguoiDung)
+            setGender(props.data.gioiTinh)
+            setBirthday(props.data.ngaySinh?.substring(0, 10))
+            setEmail(props.data.email)
+            setName(props.data.tenDayDu)
+        }
+    }, [props.data])
 
     const [isShow, setIsShow] = React.useState(false);
     const handModal = event => {
@@ -26,7 +43,7 @@ const DetailModal = React.forwardRef((props, ref) => {
     const SeeInfo = () => {
         return (
             <>
-                <button className="btn-sm btn-warning" onClick={()=>setIsSee(false)}>
+                <button className="btn-sm btn-warning" onClick={() => setIsSee(false)}>
                     <i className="glyphicon glyphicon-edit"></i>
                 </button>
                 <button className="btn-sm btn-danger" onClick={() => handModal()}>
@@ -38,7 +55,7 @@ const DetailModal = React.forwardRef((props, ref) => {
     const FixInfo = () => {
         return (
             <>
-                <button type="button" className="btn" onClick={()=>setIsSee(true)}>Hủy</button>
+                <button type="button" className="btn" onClick={() => setIsSee(true)}>Hủy</button>
                 <button type="button" className="btn btn-primary" onClick={() => handModal()}>Lưu</button>
             </>
         )
@@ -62,28 +79,36 @@ const DetailModal = React.forwardRef((props, ref) => {
                             <div className="form-group row">
                                 <label className="col-sm-4">Tên khách hàng</label>
                                 <div className="col-sm-8">
-                                    <input id="name" name="name" type="text" className="form-control"/>
+                                    <input
+                                        value={name} onChange={e => setName(e.target.value)}
+                                        type="text" className="form-control" />
                                 </div>
                             </div>
 
                             <div className="form-group row">
                                 <label className="col-sm-4">Email</label>
                                 <div className="col-sm-8">
-                                    <input id="email" name="email" type="email" className="form-control"/>
+                                    <input
+                                        value={email} onChange={e => setEmail(e.target.value)}
+                                        type="email" className="form-control" />
                                 </div>
                             </div>
 
                             <div className="form-group row">
                                 <label className="col-sm-4">Số điện toại</label>
                                 <div className="col-sm-8">
-                                    <input id="phone-number" name="phone-number" type="number" className="form-control"/>
+                                    <input
+                                        value={phonenumber} onChange={e => setPhonenumber(e.target.value)}
+                                        type="number" className="form-control" />
                                 </div>
                             </div>
 
                             <div className="form-group row">
                                 <label className="col-sm-4">Ngày sinh</label>
                                 <div className="col-sm-8">
-                                    <input id="birthday" name="birthday" type="date" className="form-control"/>
+                                    <input
+                                        value={birthday} onChange={e => setBirthday(e.target.value)}
+                                        type="date" className="form-control" />
                                 </div>
                             </div>
 
@@ -92,14 +117,18 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-sm-8">
                                     <div className="custom-controls-stacked">
                                         <div className="custom-control custom-radio">
-                                            <input name="gender" id="gender_0" type="radio" className="custom-control-input" value="male" defaultChecked/>
-                                                <label className="custom-control-label">Nam</label>
+                                            <input checked={gender === 'Nam'}
+                                                onChange={e => setGender(e.target.value)}
+                                                type="radio" className="custom-control-input" value='Nam' />
+                                            <label className="custom-control-label">Nam</label>
                                         </div>
                                     </div>
                                     <div className="custom-controls-stacked">
                                         <div className="custom-control custom-radio">
-                                            <input name="gender" id="gender_1" type="radio" className="custom-control-input" value="female"/>
-                                                <label className="custom-control-label">Nữ</label>
+                                            <input checked={gender === 'Nữ'}
+                                                onChange={e => setGender(e.target.value)}
+                                                type="radio" className="custom-control-input" value='Nữ' />
+                                            <label className="custom-control-label">Nữ</label>
                                         </div>
                                     </div>
                                 </div>
@@ -115,15 +144,17 @@ const DetailModal = React.forwardRef((props, ref) => {
     )
 });
 
-export default function CustomerInfo() {
+const CustomerInfoTable = props => {
+
+    const allData = props.allData;
 
     const tableHead = {
         stt: "STT",
-        customer: "Khách hàng",
+        tenDayDu: "Khách hàng",
         email: "Email",
         phonenumber: "Số điện thoại",
-        birthday: "Ngày sinh",
-        gender: "Giới tính"
+        ngaySinh: "Ngày sinh",
+        gioiTinh: "Giới tính"
     };
 
     const countPerPage = 10;
@@ -138,7 +169,7 @@ export default function CustomerInfo() {
             setCurrentPage(1);
             const data = cloneDeep(
                 allData
-                    .filter(item => item.customer.toLowerCase().indexOf(query) > -1)
+                    .filter(item => item.tenDayDu.toLowerCase().indexOf(query) > -1)
                     .slice(0, countPerPage)
             );
             setCollection(data);
@@ -159,15 +190,24 @@ export default function CustomerInfo() {
         const from = to - countPerPage;
         setCollection(cloneDeep(allData.slice(from, to)));
     };
-
+    function limit(string = '', limit = 0) {
+        return string?.substring(0, limit) || '';
+    }
     const tableRows = rowData => {
         const { key, index } = rowData;
         const tableCell = Object.keys(tableHead);
         const columnData = tableCell.map((keyD, i) => {
-            return <td key={i}>{key[keyD]}</td>;
+            switch (i) {
+                case 0:
+                    return <td key={i}>{index + 1 + (currentPage - 1) * countPerPage}</td>;
+                case 4:
+                    return <td key={i}>{limit(key[keyD], 10)}</td>;
+                default:
+                    return <td key={i}>{key[keyD]}</td>;
+            }
         });
 
-        return <tr key={index} onClick={()=>clickDetailModal(key["stt"])}>{columnData}</tr>;
+        return <tr key={index} onClick={() => clickDetailModal(key["idNguoiDung"])}>{columnData}</tr>;
     };
 
     const tableData = () => {
@@ -179,10 +219,13 @@ export default function CustomerInfo() {
             <td key={index}>{title}</td>
         ));
     };
-    
+
+    const [modalData, setModalData] = React.useState();
+
     const DetailModalRef = React.useRef(null);
     const clickDetailModal = props => {
-        //set taget info should take for table
+        setModalData(allData.find(obj => { return obj.idNguoiDung === props }))
+
         DetailModalRef.current.handModal();
     };
     return (
@@ -222,8 +265,44 @@ export default function CustomerInfo() {
                     total={allData.length}
                 />
             </div>
-            <DetailModal ref={DetailModalRef} />
+            <DetailModal ref={DetailModalRef} data={modalData} />
         </div>
     )
+}
+export default function CustomerInfo() {
+    const [allData, setAllData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [getData, setGetData] = React.useState(true);
+
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/user/show')
+                .then(response => response.json())
+                .then(data => {
+                    setAllData(data);
+                    setIsLoading(!isLoading);
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [getData]);
+
+    const resetPage = () => {
+        setGetData(!getData);
+        setIsLoading(!isLoading);
+    }
+
+    if (isLoading && allData.length < 1) {
+        return (
+            <div>
+                <h2>Loading</h2>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <CustomerInfoTable allData={allData} resetPage={resetPage} />
+            </div>
+        )
+    }
 }
 
