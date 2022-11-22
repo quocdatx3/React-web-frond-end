@@ -48,7 +48,7 @@ export default function Login({ setToken }) {
                             </div>
                             <div className="form-group-login">
                                 <label className="control-label"></label>
-                                <input placeholder="Tên đăng nhập" type="text"
+                                <input placeholder="Tên đăng nhập" 
                                     className="form-control-login" onChange={e => setUserName(e.target.value)} required />
                             </div>
                             <div className="form-group-login">

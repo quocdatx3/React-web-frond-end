@@ -97,7 +97,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                         <div className="panel-body">
                             <div className="form-group">
                                 <div className="col-8">
-                                    <input id="noti-headline" type="text" className="form-control" placeholder="Tiêu đề" />
+                                    <input id="noti-headline"  className="form-control" placeholder="Tiêu đề" />
                                 </div>
                             </div>
                             <div className="form-group">
@@ -139,7 +139,7 @@ const AddModal = React.forwardRef((props, ref) => {
                         <div className="panel-body">
                             <div className="form-group">
                                 <div className="col-8">
-                                    <input id="noti-headline" type="text" className="form-control" placeholder="Tiêu đề" />
+                                    <input id="noti-headline"  className="form-control" placeholder="Tiêu đề" />
                                 </div>
                             </div>
                             <div className="form-group">
@@ -282,14 +282,6 @@ export default function AskedQuestions() {
                         </div>
                     </span>
                 </div>
-            </div>
-
-            <div className="form-date-to-date-form">
-                <label >Từ ngày</label>
-                <input type="date" id="from-date" name="from-date" />
-                <label >đến ngày</label>
-                <input type="date" id="from-date" name="from-date" />
-                <button id="see" name="see" className="btn btn-primary">Xem</button>
             </div>
 
             <div>

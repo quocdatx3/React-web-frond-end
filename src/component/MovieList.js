@@ -9,6 +9,7 @@ import "../css/modal-style.css"
 import "../css/table-style.css"
 
 import SEVER_URL from '../setup';
+import { type } from '@testing-library/user-event/dist/type';
 
 
 
@@ -62,7 +63,7 @@ const DetailModal = props => {
     const [movieDescribe, setMovieDescribe] = React.useState("");
     const [inputList, setInputList] = React.useState([]);
     const onAddBtnClick = () => {
-        setInputList(inputList.concat(<input key={inputList.length} type="text"
+        setInputList(inputList.concat(<input key={inputList.length} 
             className="form-control" />));
     };
     React.useEffect(() => {
@@ -72,7 +73,7 @@ const DetailModal = props => {
         setMovieDescribe(props.data.moTa)
         props.data.dienVien.map((key, index) => {
             setInputList(inputList.concat(<input key={inputList.length}
-                type="text" className="form-control"
+                 className="form-control"
                 defaultValue={key['tenDienVien']} />)
             )
         })
@@ -90,7 +91,7 @@ const DetailModal = props => {
                         <div className="col-sm-8">
                             <div className="form-group">
                                 <label className="control-label">Tên phim</label>
-                                <input type="text"
+                                <input 
                                     className="form-control"
                                     value={movieName}
                                     onChange={e => setMovieName(e.target.value)}
@@ -100,7 +101,7 @@ const DetailModal = props => {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <label className="control-label">Năm phát hành</label>
-                                        <input type="text"
+                                        <input 
                                             className="form-control"
                                             value={movieYear}
                                             onChange={e => setMovieYear(e.target.value)} />
@@ -109,13 +110,13 @@ const DetailModal = props => {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <label className="control-label">Thời lượng theo phút</label>
-                                        <input type="text" className="form-control" disabled />
+                                        <input  className="form-control" disabled />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="control-label">Danh mục</label>
-                                <input type="text"
+                                <input 
                                     className="form-control"
                                     value={movieType}
                                     onChange={e => setMovieType(e.target.value)} />
@@ -190,17 +191,84 @@ const DetailModal = props => {
 const NewModal = props => {
 
     const [movieName, setMovieName] = React.useState("");
+    const [movieDescribe, setMovieDescribe] = React.useState("");
+    const [moviePoint, setMoviePoint] = React.useState(20);
+    const [trailer, setTrailer] = React.useState(null);
+    const [view, setView] = React.useState(0);
     const [movieYear, setMovieYear] = React.useState("");
     const [movieType, setMovieType] = React.useState("");
-    const [movieDescribe, setMovieDescribe] = React.useState("");
-    const [inputList, setInputList] = React.useState([]);
-    const onAddBtnClick = () => {
-        setInputList(inputList.concat(<input key={inputList.length} type="text"
-            className="form-control" />));
+    const [actorList, setActorList] = React.useState([]);
+    const [imageList, setImageList] = React.useState([]);
+
+    /*    actor list     */
+    const inputArr = [
+        {
+            type: "text",
+            id: 1,
+            dienVien: ""
+        }
+    ];
+
+    const [actorArr, setArr] = React.useState(inputArr);
+
+    const addInput = () => {
+        setArr(s => {
+            return [...s,
+            {
+                type: "text",
+                dienVien: ""
+            }
+            ];
+        });
     };
 
-    const fixData = () => {
-        console.log("fix data")
+    const handleChange = e => {
+        e.preventDefault();
+        const index = e.target.id;
+        setArr(s => {
+            const newArr = s.slice();
+            newArr[index].value = e.target.value;
+            console.log(newArr)
+            return newArr;
+        });
+    };
+
+    const createData = async () => {
+        try {
+            setActorList(actorArr.map((key, index) => { return { dienVien: key["value"] } }))
+            const response = await
+                fetch(SEVER_URL + 'apis/film/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        tenPhim: movieName,
+                        moTa: movieDescribe,
+                        danhGiaPhim: moviePoint,
+                        trailer: trailer,
+                        luotXem: view,
+                        ngayChieu: movieYear,
+                        dienVien: actorList,
+                        theLoai: [{theLoai:movieType}],
+                        duongDanAnh:imageList
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            props.closeNewModal()
+            props.resetPage()
+        }
     }
 
     const InfoPart1 = () => {
@@ -211,7 +279,7 @@ const NewModal = props => {
                         <div className="col-sm-8">
                             <div className="form-group">
                                 <label className="control-label">Tên phim</label>
-                                <input type="text"
+                                <input 
                                     className="form-control"
                                     value={movieName}
                                     onChange={e => setMovieName(e.target.value)}
@@ -221,7 +289,7 @@ const NewModal = props => {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <label className="control-label">Năm phát hành</label>
-                                        <input type="text"
+                                        <input type="date"
                                             className="form-control"
                                             value={movieYear}
                                             onChange={e => setMovieYear(e.target.value)} />
@@ -230,13 +298,13 @@ const NewModal = props => {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <label className="control-label">Thời lượng theo phút</label>
-                                        <input type="text" className="form-control" disabled />
+                                        <input  className="form-control" disabled />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="control-label">Danh mục</label>
-                                <input type="text"
+                                <input 
                                     className="form-control"
                                     value={movieType}
                                     onChange={e => setMovieType(e.target.value)} />
@@ -268,10 +336,20 @@ const NewModal = props => {
                     <div className="form-horizontal">
                         <div className="form-group">
                             <div className="col-xs-6">
-                                {inputList}
+                                {actorArr.map((item, i) => {
+                                    return (
+                                        <input
+                                            onChange={handleChange}
+                                            value={item.value}
+                                            id={i}
+                                            type={item.type}
+                                            size="40"
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
-                        <button className='btn-circle' onClick={() => onAddBtnClick()}>+</button>
+                        <button className='btn-circle' onClick={addInput}>+</button>
                     </div>
                 </div>
             </>
@@ -298,7 +376,7 @@ const NewModal = props => {
                         </div>
                         <div className="panel-footer right-align">
                             <button type="button" data-dismiss="modal" className="btn" onClick={() => props.closeNewModal()}>Hủy</button>
-                            <button type="button" data-dismiss="modal" className="btn btn-primary" onClick={() => fixData()}>Lưu</button>
+                            <button type="button" data-dismiss="modal" className="btn btn-primary" onClick={() => createData()}>Lưu</button>
                         </div>
                     </div>
                 </div>
@@ -383,7 +461,7 @@ const MovieListTable = props => {
         const columnData = tableCell.map((keyD, i) => {
             switch (i) {
                 case 0:
-                    return <td key={i}>{index+1+(currentPage-1)*countPerPage}</td>;
+                    return <td key={i}>{index + 1 + (currentPage - 1) * countPerPage}</td>;
                 case 2:
                     return <td key={i}> {typeList(key["theLoai"])} </td>;
                 case 3:

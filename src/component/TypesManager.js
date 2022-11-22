@@ -72,7 +72,7 @@ const AddModal = React.forwardRef((props, ref) => {
                         <div className="modal-body text-center">
                             <div className="form-group">
                                 <label>Tên thể loại:</label>
-                                <input id="" name="" type="text" className="form-control"/>
+                                <input id="" name=""  className="form-control"/>
                             </div>
                         </div>
                         <div className="modal-footer">
@@ -112,7 +112,7 @@ const FixModal = React.forwardRef((props, ref) => {
                         <div className="modal-body text-center">
                             <div className="form-group">
                                 <label>Tên thể loại:</label>
-                                <input type="text" className="form-control"/>
+                                <input  className="form-control"/>
                             </div>
                         </div>
                         <div className="modal-footer">

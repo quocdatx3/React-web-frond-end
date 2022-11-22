@@ -168,7 +168,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-sm-8">
                                     <input
                                         value={name} onChange={e => setName(e.target.value)}
-                                        className="form-control" disabled={isSee} type="text" />
+                                        className="form-control" disabled={isSee}  />
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -176,7 +176,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-sm-8">
                                     <input
                                         value={target} onChange={e => setTarget(e.target.value)}
-                                        className="form-control" disabled={isSee} type="text" />
+                                        className="form-control" disabled={isSee}  />
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -225,7 +225,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-sm-8">
                                     <input
                                         value={voulcher} onChange={e => setVoulcher(e.target.value)}
-                                        type="text" className="form-control" disabled={isSee} />
+                                         className="form-control" disabled={isSee} />
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -280,19 +280,19 @@ const AddModal = React.forwardRef((props, ref) => {
                             <div className="form-group row">
                                 <label className="col-sm-4 col-form-label">Tên chương trình khuyến mãi</label>
                                 <div className="col-sm-8">
-                                    <input id="name" type="text" className="form-control" />
+                                    <input id="name"  className="form-control" />
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label className="col-sm-4 col-form-label">Đối tượng áp dụng</label>
                                 <div className="col-sm-8">
-                                    <input id="target" type="text" className="form-control" />
+                                    <input id="target"  className="form-control" />
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label className="col-sm-4 col-form-label">Thời gian áp dụng</label>
                                 <div className="col-sm-8">
-                                    <input id="time" type="text" className="form-control" />
+                                    <input id="time"  className="form-control" />
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -315,7 +315,7 @@ const AddModal = React.forwardRef((props, ref) => {
                             <div className="form-group row">
                                 <label className="col-sm-4 col-form-label">Mã khuyến mãi</label>
                                 <div className="col-sm-8">
-                                    <input id="voucher" type="text" className="form-control" />
+                                    <input id="voucher"  className="form-control" />
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -535,7 +535,7 @@ export default function SalePromotion() {
         setIsLoading(true);
     }
 
-    if (isLoading && allData.length < 1) {
+    if (isLoading) {
         return (
             <div>
                 <h2>Loading</h2>

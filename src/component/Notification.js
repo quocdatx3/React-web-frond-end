@@ -103,7 +103,7 @@ const AddModal = props => {
                         <div className="panel-body">
                             <div className="form-group">
                                 <div className="col-8">
-                                    <input type="text" className="form-control" placeholder="Tiêu đề" />
+                                    <input  className="form-control" placeholder="Tiêu đề" />
                                 </div>
                             </div>
                             <div className="form-group">

@@ -68,7 +68,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                             <div className="input-group-addon">
                                                 Tài khoản:
                                             </div>
-                                            <input className="form-control" id="email" name="email" type="text" />
+                                            <input className="form-control" id="email" name="email"  />
                                         </div>
                                     </div>
                                     <div className="form-group ">

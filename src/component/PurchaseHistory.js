@@ -220,7 +220,7 @@ const PurchaseHistoryDetail = props => {
                                 <div className="form-group row">
                                     <label className="col-sm-4 col-form-label">Giới tính</label>
                                     <div className="col-sm-8">
-                                        <input id="gender" type="text" className="form-control" disabled></input>
+                                        <input id="gender"  className="form-control" disabled></input>
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +231,7 @@ const PurchaseHistoryDetail = props => {
                                 <div className="form-group row">
                                     <label className="col-sm-4 col-form-label">Hình thức thanh toán</label>
                                     <div className="col-sm-8">
-                                        <input id="payment" type="text" className="form-control" disabled></input>
+                                        <input id="payment"  className="form-control" disabled></input>
                                     </div>
                                 </div>
                                 <div className="form-group row">

@@ -137,8 +137,8 @@ const DetailModal = React.forwardRef((props, ref) => {
         } catch (err) {
             console.log(err.message);
         } finally {
-            handModal()
             props.resetPage()
+            handModal()
         }
     };
 
@@ -154,7 +154,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Tên gói</label>
                                 <div className="col-xs-8">
-                                    <input type="text"
+                                    <input 
                                         className="form-control"
                                         value={name}
                                         onChange={e => setName(e.target.value)} />
@@ -315,7 +315,7 @@ const AddModal = React.forwardRef((props, ref) => {
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Tên gói</label>
                                 <div className="col-xs-8">
-                                    <input type="text"
+                                    <input 
                                         className="form-control"
                                         value={name}
                                         onChange={e => setName(e.target.value)} />
@@ -613,7 +613,7 @@ export default function ServicePackManager() {
         setIsLoading(true);
     }
 
-    if (isLoading && allData.length < 1) {
+    if (isLoading) {
         return (
             <div>
                 <h2>Loading</h2>

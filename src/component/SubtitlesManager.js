@@ -24,7 +24,7 @@ const SubtitlesListManager = props => {
     },
     {
       id: 2,
-      name: "The F*ck",
+      name: "The F*b",
       img: ""
     },
     {
@@ -118,7 +118,7 @@ const SubtitlesListManager = props => {
         </div>
         <div className="col-md-4">
           <div className="find-group">
-            <input id="Findinput" name="find" type="text" className="form-control" />
+            <input id="Findinput" name="find"  className="form-control" />
             <span className="fa fa-search field-icon"></span>
           </div>
         </div>

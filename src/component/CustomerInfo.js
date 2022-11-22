@@ -81,7 +81,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-sm-8">
                                     <input
                                         value={name} onChange={e => setName(e.target.value)}
-                                        type="text" className="form-control" />
+                                         className="form-control" />
                                 </div>
                             </div>
 
@@ -290,7 +290,7 @@ export default function CustomerInfo() {
         setIsLoading(!isLoading);
     }
 
-    if (isLoading && allData.length < 1) {
+    if (isLoading) {
         return (
             <div>
                 <h2>Loading</h2>

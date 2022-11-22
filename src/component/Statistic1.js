@@ -160,7 +160,7 @@ export default function Statistic1() {
         setIsLoading(!isLoading);
     }
 
-    if (isLoading && allData.length < 1) {
+    if (isLoading  && allData.length < 1) {
         return (
             <div>
                 <h2>Loading</h2>

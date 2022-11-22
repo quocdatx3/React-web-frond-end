@@ -222,7 +222,7 @@ export default function RequestsManager() {
         setIsLoading(true);
     }
 
-    if (isLoading && allData.length < 1) {
+    if (isLoading) {
         return (
             <div>
                 <h2>Loading</h2>
