@@ -438,10 +438,10 @@ const MovieListTable = props => {
 
     const [showNewlModal, setShowNewModal] = React.useState(false);
     const clickNewModal = () => {
-        setShowDetailModal(!showDetailModal)
+        setShowNewModal(!showNewlModal)
     };
     const closeNewModal = () => {
-        setShowNewModal(!showDetailModal)
+        setShowNewModal(!showNewlModal)
     }
 
     return (
