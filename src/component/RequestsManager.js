@@ -8,15 +8,17 @@ import "../css/style.css"
 import "../css/modal-style.css"
 import "../css/table-style.css"
 
-import { allData } from "./fakedata/RequestManager";
+import SEVER_URL from '../setup';
 
-export default function RequestsManager() {
-    
+const RequestsManagerTable = props => {
+
+    const allData = props.allData
+
     const tableHead = {
         stt: "Stt",
-        customer: "Phim được yêu cầu",
-        account: "Tài khoản",
-        time: "thời gian yêu cầu",
+        phimYeuCau: "Phim được yêu cầu",
+        //account: "Tài khoản",
+        ngayYeuCau: "thời gian yêu cầu",
         func: "Tác vụ"
     };
 
@@ -55,20 +57,71 @@ export default function RequestsManager() {
         setCollection(cloneDeep(allData.slice(from, to)));
     };
 
-    const acceptRequest=e=>{
-        console.log(e)
-    }
+    const acceptRequest = async (id) => {
+        try {
+            const response = await
+                fetch(SEVER_URL + 'apis/request/update/status', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        idYeuCau: id,
+                        trangThai: "daDuyet"
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
 
-    const declineRequest=e=>{
-        console.log(e)
-    }
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            props.resetPage()
+        }
+    };
+
+    const declineRequest = async (id) => {
+        try {
+            const response = await
+                fetch(SEVER_URL + 'apis/request/update/status', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        idYeuCau: id,
+                        trangThai: "huy"
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            props.resetPage()
+        }
+    };
+
 
     const FuncButtons = props => {
         return <div>
-            <button className="btn btn-success" onClick={() => acceptRequest(props.stt)}>
+            <button className="btn btn-success" onClick={() => acceptRequest(props)}>
                 Đồng ý
             </button>
-            <button className="btn btn-danger" onClick={() => declineRequest(props.stt)}>
+            <button className="btn btn-danger" onClick={() => declineRequest(props)}>
                 Từ chối
             </button>
         </div>
@@ -78,8 +131,14 @@ export default function RequestsManager() {
         const { key, index } = rowData;
         const tableCell = Object.keys(tableHead);
         const columnData = tableCell.map((keyD, i) => {
-            if(i===4) return <td key={i}>{FuncButtons(key["stt"])}</td>;
-            return <td key={i}>{key[keyD]}</td>;
+            switch (i) {
+                case 0:
+                    return <td key={i}>{index+1+(currentPage-1)*countPerPage}</td>;
+                case 3:
+                    return <td key={i}>{FuncButtons(key["idYeuCau"])}</td>;
+                default:
+                    return <td key={i}>{key[keyD]}</td>;
+            }
         });
 
         return <tr key={index}>{columnData}</tr>;
@@ -103,7 +162,7 @@ export default function RequestsManager() {
                 </div>
                 <div className="col-md-4">
                     <div className="find-group">
-                    <input
+                        <input
                             id="Findinput"
                             className="form-control"
                             placeholder="Search"
@@ -119,10 +178,10 @@ export default function RequestsManager() {
                 <div className="table-responsive">
                     <table id='RequestManager-table' className="table table-hover table-bordered">
                         <thead className="table-header-style-1">
-                        <tr>{headRow()}</tr>
+                            <tr>{headRow()}</tr>
                         </thead>
                         <tbody>
-                        {tableData()}
+                            {tableData()}
                         </tbody>
                     </table>
                 </div>
@@ -138,4 +197,45 @@ export default function RequestsManager() {
             </div>
         </div>
     )
+}
+
+export default function RequestsManager() {
+
+    const [allData, setAllData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [getData, setGetData] = React.useState(true);
+
+    React.useEffect(
+        () => {
+            fetch(SEVER_URL + 'apis/request/show')
+                .then(response => response.json())
+                .then(data => {
+                    setAllData(data.filter(function(p){return p.trangThai === "dangCho"}));
+                    setIsLoading(!isLoading);
+                    console.log(data)
+                });
+            // empty dependency array means this effect will only run once (like componentDidMount in classes)
+        }, [getData]);
+
+    const resetPage = () => {
+        setGetData(!getData);
+        setIsLoading(true);
+    }
+
+    if (isLoading && allData.length < 1) {
+        return (
+            <div>
+                <h2>Loading</h2>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <RequestsManagerTable allData={allData} resetPage={resetPage} />
+            </div>
+        )
+    }
+
+
 }

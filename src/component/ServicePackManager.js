@@ -87,16 +87,18 @@ const DetailModal = React.forwardRef((props, ref) => {
         }
     }));
 
-    const [id, setId] = React.useState()
-    const [name, setName] = React.useState()
-    const [price, setPrice] = React.useState()
-    const [quality, setQuality] = React.useState()
+    const [id, setId] = React.useState('')
+    const [name, setName] = React.useState('')
+    const [price, setPrice] = React.useState('')
+    const [quality, setQuality] = React.useState('')
+    const [state, setState] = React.useState('')
     React.useEffect(() => {
         console.log(props.data);
         setName(props.data.tenGoi);
         setPrice(props.data.giaTien);
         setQuality(props.data.chatLuong);
         setId(props.data.idGoi);
+        setState(props.data.trangThai);
     }, [props.data])
 
     /** Show/Hide Modal **/
@@ -115,7 +117,9 @@ const DetailModal = React.forwardRef((props, ref) => {
                         idGoi: id,
                         tenGoi: name,
                         giaTien: price,
+                        trangThai: state,
                         chatLuong: quality
+                        
                     }),
                     headers: {
                         'Content-Type': 'application/json',
@@ -168,7 +172,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                 <div className="col-xs-8">
                                     <label className="checkbox">
                                         <input type="checkbox" value="hd-resolotion"
-                                        checked = {quality === "HD"}
+                                            checked={quality === "HD"}
                                             onChange={() => {
                                                 setQuality("HD")
                                             }} />
@@ -176,7 +180,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                     </label>
                                     <label className="checkbox">
                                         <input type="checkbox" value="4K-resolution"
-                                        checked = {quality === "4K"}
+                                            checked={quality === "4K"}
                                             onChange={() => {
                                                 setQuality("4K")
                                             }} />
@@ -184,7 +188,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                     </label>
                                     <label className="checkbox">
                                         <input type="checkbox" value="CLC-resolution"
-                                        checked = {quality === "2K"}
+                                            checked={quality === "2K"}
                                             onChange={() => {
                                                 setQuality("2K")
                                             }} />
@@ -192,6 +196,7 @@ const DetailModal = React.forwardRef((props, ref) => {
                                     </label>
                                 </div>
                             </div>
+                            {/* 
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Xem trên các thiết bị</label>
                                 <div className="col-xs-8">
@@ -213,20 +218,21 @@ const DetailModal = React.forwardRef((props, ref) => {
                                     </label>
                                 </div>
                             </div>
+                            */}
                             <div className="form-group">
-                                <label className="control-label col-xs-4">Số máy được xem cùng lúc</label>
+                                <label className="control-label col-xs-4">trạng thái</label>
                                 <div className="col-xs-8">
                                     <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="1" />
-                                        1
+                                        <input type="radio" name="device-number" 
+                                        value="1" checked={state==="1"} 
+                                        onChange={e=>{setState(e.currentTarget.value)}} />
+                                        Hoạt động
                                     </label>
                                     <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="2" />
-                                        2
-                                    </label>
-                                    <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="4" />
-                                        4
+                                        <input type="radio" name="device-number" 
+                                        value="0" checked={state==="0"} 
+                                        onChange={e=>{setState(e.currentTarget.value)}} />
+                                        Ngừng
                                     </label>
                                 </div>
                             </div>
@@ -253,9 +259,10 @@ const AddModal = React.forwardRef((props, ref) => {
         }
     }));
 
-    const [name, setName] = React.useState()
-    const [price, setPrice] = React.useState()
-    const [quality, setQuality] = React.useState()
+    const [name, setName] = React.useState('')
+    const [price, setPrice] = React.useState('')
+    const [quality, setQuality] = React.useState('')
+    const [state, setState] = React.useState('')
 
     /** Show/Hide Modal **/
     const [isShow, setIsShow] = React.useState(false);
@@ -272,6 +279,7 @@ const AddModal = React.forwardRef((props, ref) => {
                     body: JSON.stringify({
                         tenGoi: name,
                         giaTien: price,
+                        trangThai: state,
                         chatLuong: quality
                     }),
                     headers: {
@@ -346,6 +354,7 @@ const AddModal = React.forwardRef((props, ref) => {
                                     </label>
                                 </div>
                             </div>
+                            {/*
                             <div className="form-group">
                                 <label className="control-label col-xs-4">Xem trên các thiết bị</label>
                                 <div className="col-xs-8">
@@ -367,20 +376,21 @@ const AddModal = React.forwardRef((props, ref) => {
                                     </label>
                                 </div>
                             </div>
+                            */}
                             <div className="form-group">
-                                <label className="control-label col-xs-4">Số máy được xem cùng lúc</label>
+                                <label className="control-label col-xs-4">trạng thái</label>
                                 <div className="col-xs-8">
                                     <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="1" />
-                                        1
+                                        <input type="radio" name="device-number" 
+                                        value="1" checked={state==="1"} 
+                                        onChange={e=>{setState(e.currentTarget.value)}} />
+                                        Hoạt động
                                     </label>
                                     <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="2" />
-                                        2
-                                    </label>
-                                    <label className="radio-inline">
-                                        <input type="radio" name="device-number" value="4" />
-                                        4
+                                        <input type="radio" name="device-number" 
+                                        value="0" checked={state==="0"} 
+                                        onChange={e=>{setState(e.currentTarget.value)}} />
+                                        Ngừng
                                     </label>
                                 </div>
                             </div>
@@ -410,7 +420,7 @@ const ServicePackManagerTable = props => {
         rehd: "Độ phân giải HD",
         re4k: "Độ phân giải 4k",
         muldevice: "Độ phân giải CLC",
-        state: "Trạng thái",
+        trangThai: "Trạng thái",
         func: "Tác vụ"
     };
 
@@ -464,7 +474,13 @@ const ServicePackManagerTable = props => {
             </button>
         </div>
     }
-
+    function setTrangThai(string="") {
+        console.log(string)
+        if (string === '1')
+            return "Hoạt động"
+        else
+            return "Ngừng"
+    }
     const tableRows = rowData => {
         const { key, index } = rowData;
         const tableCell = Object.keys(tableHead);
@@ -476,6 +492,8 @@ const ServicePackManagerTable = props => {
                     return <td key={i}>{Checkbox(key["chatLuong"], "4K")}</td>;
                 case 4:
                     return <td key={i}>{Checkbox(key["chatLuong"], "2K")}</td>;
+                case 5:
+                    return <td key={i}>{setTrangThai( key["trangThai"] )}</td>;
                 case 6:
                     return <td key={i}><FuncButtons id={key["idGoi"]} /></td>;
                 default:
@@ -567,8 +585,8 @@ const ServicePackManagerTable = props => {
             </div>
 
             <ConfirmModal ref={ConfirmModalRef} data={modalData} resetPage={props.resetPage} />
-            <DetailModal ref={DetailModalRef} data={modalData} resetPage={props.resetPage}/>
-            <AddModal ref={AddModalRef} resetPage={props.resetPage}/>
+            <DetailModal ref={DetailModalRef} data={modalData} resetPage={props.resetPage} />
+            <AddModal ref={AddModalRef} resetPage={props.resetPage} />
         </div>
     )
 }
@@ -595,7 +613,7 @@ export default function ServicePackManager() {
         setIsLoading(true);
     }
 
-    if (isLoading && allData.length<1) {
+    if (isLoading && allData.length < 1) {
         return (
             <div>
                 <h2>Loading</h2>

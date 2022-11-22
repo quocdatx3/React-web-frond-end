@@ -98,7 +98,7 @@ export default function Statistic2() {
             fetch(SEVER_URL + 'apis/admin/show/film/rating/1')
                 .then(response => response.json())
                 .then(data => {
-                    setAllData(data.sort((a, b) => a.danhGiaPhim - b.danhGiaPhim).slice(0, 10));
+                    setAllData(data.sort((a, b) => -(a.danhGiaPhim - b.danhGiaPhim)).slice(0, 10));
                     setIsLoading(!isLoading);
                 });
             // empty dependency array means this effect will only run once (like componentDidMount in classes)

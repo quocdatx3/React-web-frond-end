@@ -26,8 +26,6 @@ export default function Statistic3() {
             // empty dependency array means this effect will only run once (like componentDidMount in classes)
         }, [month]);
 
-
-
     return (
         <div>
             <div className="row toolbar">
