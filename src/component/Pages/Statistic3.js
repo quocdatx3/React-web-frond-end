@@ -1,11 +1,11 @@
 import React from 'react'
 import DonutChart from 'react-donut-chart';
 
-import "../css/style.css"
-import "../css/modal-style.css"
-import "../css/table-style.css"
+import "../Pages/css/style.css"
+import "../Pages/css/modal-style.css"
+import "../Pages/css/table-style.css"
 
-import SEVER_URL from '../setup';
+import SEVER_URL from '../../setup';
 
 export default function Statistic3() {
     const [data,setData] = React.useState([])
@@ -13,7 +13,11 @@ export default function Statistic3() {
     const [month,setMonth] = React.useState()
     React.useEffect(
         () => {
-            fetch(SEVER_URL + 'apis/admin/show/hotSubscription/')
+            fetch(SEVER_URL + 'apis/admin/show/hotSubscription/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(response => response.json())
                 .then(data => {
                     const filtereData=data.map((key,index)=>{
