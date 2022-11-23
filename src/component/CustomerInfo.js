@@ -4,11 +4,11 @@ import throttle from "lodash/throttle";
 import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 
-import "../Pages/css/style.css"
-import "../Pages/css/modal-style.css"
-import "../Pages/css/table-style.css"
+import "../css/style.css"
+import "../css/modal-style.css"
+import "../css/table-style.css"
 
-import SEVER_URL from '../../setup';
+import SEVER_URL from '../setup';
 
 const DetailModal = React.forwardRef((props, ref) => {
     React.useImperativeHandle(ref, () => ({
@@ -276,11 +276,7 @@ export default function CustomerInfo() {
 
     React.useEffect(
         () => {
-            fetch(SEVER_URL + 'apis/user/show', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }})
+            fetch(SEVER_URL + 'apis/user/show')
                 .then(response => response.json())
                 .then(data => {
                     setAllData(data);

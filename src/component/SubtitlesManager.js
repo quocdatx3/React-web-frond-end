@@ -1,11 +1,12 @@
 import React from 'react'
 import cloneDeep from "lodash/cloneDeep";
+import throttle from "lodash/throttle";
 import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 
-import "../Pages/css/style.css"
-import "../Pages/css/modal-style.css"
-import "../Pages/css/table-style.css"
+import "../css/style.css"
+import "../css/modal-style.css"
+import "../css/table-style.css"
 
 const SubtitlesListManager = props => {
   const [movieNum, setMovieNum] = React.useState(25)

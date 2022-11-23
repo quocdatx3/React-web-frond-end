@@ -1,11 +1,11 @@
 import React from 'react'
 import cloneDeep from "lodash/cloneDeep";
 
-import "../Pages/css/style.css"
-import "../Pages/css/modal-style.css"
-import "../Pages/css/table-style.css"
+import "../css/style.css"
+import "../css/modal-style.css"
+import "../css/table-style.css"
 
-import SEVER_URL from '../../setup';
+import SEVER_URL from '../setup';
 
 const Card = props => {
 
@@ -95,11 +95,7 @@ export default function Statistic2() {
 
     React.useEffect(
         () => {
-            fetch(SEVER_URL + 'apis/admin/show/film/rating/1', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }})
+            fetch(SEVER_URL + 'apis/admin/show/film/rating/1')
                 .then(response => response.json())
                 .then(data => {
                     setAllData(data.sort((a, b) => -(a.danhGiaPhim - b.danhGiaPhim)).slice(0, 10));
