@@ -107,7 +107,7 @@ const DetailModal = props => {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <label className="control-label">Thời lượng theo phút</label>
-                                        <input  className="form-control" disabled />
+                                        <input  className="form-control"  />
                                     </div>
                                 </div>
                             </div>
@@ -295,7 +295,7 @@ const NewModal = props => {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <label className="control-label">Thời lượng theo phút</label>
-                                        <input  className="form-control" disabled />
+                                        <input  className="form-control"  />
                                     </div>
                                 </div>
                             </div>

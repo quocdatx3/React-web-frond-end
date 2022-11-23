@@ -87,10 +87,39 @@ const DetailModal = props => {
 
 const AddModal = props => {
 
-    const addNotice = () => {
-        console.log("addNotice " + props);
-        props.closeNewModal();
-    }
+    const [tieuDeThongBao,setTieuDeThongBao] = React.useState("")
+    const [noiDungThongBao,setNoiDungThongBao] = React.useState("")
+
+    const addNotice =  async () => {
+        try {
+            const response = await
+                fetch(SEVER_URL + 'apis/notification/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        tieuDeThongBao:tieuDeThongBao,
+                        noiDungThongBao:noiDungThongBao
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log('result is: ', JSON.stringify(result, null, 4));
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            props.resetPage()
+            props.closeNewModal();
+        }
+    };
+
 
     return (
         <>
@@ -103,12 +132,18 @@ const AddModal = props => {
                         <div className="panel-body">
                             <div className="form-group">
                                 <div className="col-8">
-                                    <input  className="form-control" placeholder="Tiêu đề" />
+                                    <input  
+                                    value={tieuDeThongBao}
+                                    onChange = {e=>{setTieuDeThongBao(e.target.value)}}
+                                    className="form-control" placeholder="Tiêu đề" />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="">
-                                    <textarea cols="40" rows="15" className="form-control" placeholder="Nội dung" />
+                                    <textarea 
+                                    value={noiDungThongBao}
+                                    onChange = {e=>{setNoiDungThongBao(e.target.value)}}
+                                    cols="40" rows="15" className="form-control" placeholder="Nội dung" />
                                 </div>
                             </div>
 

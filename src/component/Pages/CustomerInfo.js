@@ -43,9 +43,11 @@ const DetailModal = React.forwardRef((props, ref) => {
     const SeeInfo = () => {
         return (
             <>
-                <button className="btn-sm btn-warning" onClick={() => setIsSee(false)}>
-                    <i className="glyphicon glyphicon-edit"></i>
-                </button>
+                {
+                //<button className="btn-sm btn-warning" onClick={() => setIsSee(false)}>
+                //    <i className="glyphicon glyphicon-edit"></i>
+                //</button>
+                }
                 <button className="btn-sm btn-danger" onClick={() => handModal()}>
                     <i className="glyphicon glyphicon-remove"></i>
                 </button>
