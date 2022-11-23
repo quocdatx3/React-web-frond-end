@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 
-import "../css/login-style.css"
+import "./Pages/css/login-style.css"
 
 import SEVER_URL from '../setup';
 
