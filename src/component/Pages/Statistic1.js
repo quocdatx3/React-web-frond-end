@@ -4,11 +4,11 @@ import throttle from "lodash/throttle";
 //import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 
-import "../css/style.css"
-import "../css/modal-style.css"
-import "../css/table-style.css"
+import "../Pages/css/style.css"
+import "../Pages/css/modal-style.css"
+import "../Pages/css/table-style.css"
 
-import SEVER_URL from '../setup';
+import SEVER_URL from '../../setup';
 
 const Statistic1Table = props => {
     const allData = props.allData
@@ -146,7 +146,11 @@ export default function Statistic1() {
     const [getData, setGetData] = React.useState(true);
     React.useEffect(
         () => {
-            fetch(SEVER_URL + 'apis/admin/show/film/view/1')
+            fetch(SEVER_URL + 'apis/admin/show/film/view/1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)

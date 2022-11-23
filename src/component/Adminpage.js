@@ -1,23 +1,23 @@
 import React from 'react'
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 
-import "../css/style.css"
+import "./Pages/css/style.css"
 
-import MovieList from './MovieList';
-import CustomerInfo from './CustomerInfo';
-import Notification from './Notification';
-import PurchaseHistory from './PurchaseHistory';
-import ServicePackManager from './ServicePackManager';
-import Statistic1 from './Statistic1';
-import Statistic2 from './Statistic2';
-import Statistic3 from './Statistic3';
-import AskedQuestions from './AskedQuestions';
-import SalePromotion from './SalePromotion';
-import CustomerCare from './CustomerCare';
-import SubtitlesManager from './SubtitlesManager';
-import CustomerComplains from './CustomerComplains';
-import RequestsManager from './RequestsManager';
-import TypesManager from './TypesManager';
+import MovieList from './Pages/MovieList';
+import CustomerInfo from './Pages/CustomerInfo';
+import Notification from './Pages/Notification';
+import PurchaseHistory from './Pages/PurchaseHistory';
+import ServicePackManager from './Pages/ServicePackManager';
+import Statistic1 from './Pages/Statistic1';
+import Statistic2 from './Pages/Statistic2';
+import Statistic3 from './Pages/Statistic3';
+import AskedQuestions from './Pages/AskedQuestions';
+import SalePromotion from './Pages/SalePromotion';
+import CustomerCare from './Pages/CustomerCare';
+import SubtitlesManager from './Pages/SubtitlesManager';
+import CustomerComplains from './Pages/CustomerComplains';
+import RequestsManager from './Pages/RequestsManager';
+import TypesManager from './Pages/TypesManager';
 
 export default function Adminpage() {
     const dropdown = event => {

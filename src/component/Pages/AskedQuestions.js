@@ -4,11 +4,11 @@ import throttle from "lodash/throttle";
 import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 
-import "../css/style.css"
-import "../css/modal-style.css"
-import "../css/table-style.css"
+import "../Pages/css/style.css"
+import "../Pages/css/modal-style.css"
+import "../Pages/css/table-style.css"
 
-import { allData } from "./fakedata/AskedQuestion";
+import { allData } from "../fakedata/AskedQuestion";
 
 const ConfirmModal = React.forwardRef((props, ref) => {
     React.useImperativeHandle(ref, () => ({
